@@ -3,6 +3,7 @@ package com.pzhu.iacaa2_0.controller;
 
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.CourseTask;
+import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
 import com.pzhu.iacaa2_0.entityVo.CourseTaskVo;
 import com.pzhu.iacaa2_0.service.ICourseTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,12 @@ public class CourseTaskController {
     public ActionResult voList(@RequestBody CourseTask courseTask){
         List<CourseTaskVo> courseTaskVos = courseTaskService.voList(courseTask);
         return ActionResult.ofSuccess(courseTaskVos);
+    }
+
+    @RequestMapping("/delete")
+    public ActionResult delete(@RequestBody CourseTask courseTask){
+        boolean b = courseTaskService.removeById(courseTask.getId());
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
 
 

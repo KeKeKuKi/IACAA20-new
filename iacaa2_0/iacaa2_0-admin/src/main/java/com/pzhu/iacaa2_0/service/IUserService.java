@@ -2,6 +2,7 @@ package com.pzhu.iacaa2_0.service;
 
 import com.pzhu.iacaa2_0.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * <p>
@@ -11,6 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author ZhaoZezhong
  * @since 2021-01-15
  */
-public interface IUserService extends IService<User> {
+public interface IUserService extends IService<User>, UserDetailsService {
 
 }

@@ -13,7 +13,7 @@ public class BaseEntity {
      */
     //去除Myatisplus生成id
     @TableId(value = "id",type = IdType.AUTO)
-    private long id;
+    private Long id;
 
     /**
      * 创建时间

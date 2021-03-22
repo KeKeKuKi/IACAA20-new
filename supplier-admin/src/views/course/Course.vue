@@ -217,6 +217,22 @@ export default {
       this.editForm.courseTasks.push({describes:'',course:{id: this.editForm.id},target:{id:'' },mix: ''})
     },
     deleteDiscribe(index){
+      var courseTask = this.editForm.courseTasks[index]
+      if(courseTask.id){
+        requestByClient(supplierConsumer, 'POST','courseTask/delete', {
+          id: courseTask.id
+        },res => {
+          if (res.data.succ) {
+            this.$message({
+              message: '已删除',
+              type: 'success'
+            });
+          }else {
+            this.$message.error(res.data.msg);
+          }
+          this.loading = false
+        })
+      }
       this.editForm.courseTasks.splice(index,1)
     },
   }

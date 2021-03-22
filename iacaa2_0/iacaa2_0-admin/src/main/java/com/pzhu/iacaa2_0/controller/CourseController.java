@@ -1,26 +1,20 @@
 package com.pzhu.iacaa2_0.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pzhu.iacaa2_0.base.PageBaseController;
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.Course;
-import com.pzhu.iacaa2_0.entity.GradRequirement;
 import com.pzhu.iacaa2_0.entityVo.CourseVo;
 import com.pzhu.iacaa2_0.entityVo.IdsVo;
 import com.pzhu.iacaa2_0.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -77,6 +77,14 @@ public class ActionResult<T> implements Serializable {
         return result;
     }
 
+    public static ActionResult ofFail(String message) {
+        ActionResult result = new ActionResult();
+        result.succ = false;
+        result.code = CommonErrorCode.DB_SERVICE_UNKNOWN_ERROR.getCode();
+        result.msg = message;
+        return result;
+    }
+
     /**
      * 获取 json
      */

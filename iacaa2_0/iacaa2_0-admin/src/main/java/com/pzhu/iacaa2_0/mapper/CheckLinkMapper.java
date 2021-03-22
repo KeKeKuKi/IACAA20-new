@@ -2,6 +2,9 @@ package com.pzhu.iacaa2_0.mapper;
 
 import com.pzhu.iacaa2_0.entity.CheckLink;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CheckLinkMapper extends BaseMapper<CheckLink> {
 
+    List<CheckLink> list(CheckLinkVo vo);
 }

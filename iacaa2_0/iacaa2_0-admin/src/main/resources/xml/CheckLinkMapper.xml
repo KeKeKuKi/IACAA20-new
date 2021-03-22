@@ -20,4 +20,23 @@
         task_id, name, target_score, average_score, mix, created_date, update_date
     </sql>
 
+    <select id="list" parameterType="com.pzhu.iacaa2_0.entityVo.CheckLinkVo" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from t_check_link a
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id != null and id !=''">
+                    AND a.id = #{id}
+                </if>
+                <if test="taskId != null and taskId !=''">
+                    AND a.task_id = #{taskId}
+                </if>
+                <if test="word != null and word !=''">
+                    AND (a.name like CONCAT(CONCAT('%',#{word}),'%'))
+                </if>
+            </trim>
+        </where>
+        ORDER BY a.name
+    </select>
+
 </mapper>
