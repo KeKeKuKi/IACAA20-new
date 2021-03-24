@@ -5,6 +5,8 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.gapache.security.annotation.AuthResource;
+import com.gapache.security.annotation.NeedAuth;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pzhu.iacaa2_0.base.PageBaseController;
@@ -54,6 +56,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/gradRequirement")
+@NeedAuth("GradRequirement")
 public class GradRequirementController extends PageBaseController {
 
     @Autowired
@@ -62,6 +65,7 @@ public class GradRequirementController extends PageBaseController {
     ITargetService targetService;
 
     @RequestMapping("/list")
+    @AuthResource(scope = "list", name = "GradRequirement列表")
     public ActionResult list(@RequestBody GradRequirementVo vo){
         QueryWrapper<GradRequirement> wrapper = new QueryWrapper<>();
         if(!StringUtils.isEmpty(vo.getWord())){
@@ -91,16 +95,14 @@ public class GradRequirementController extends PageBaseController {
     @RequestMapping("/update")
     public ActionResult update(@RequestBody GradRequirementVo vo){
         List<Target> targets = vo.getTargets();
-        UpdateWrapper<Target> targetUpdateWrapper = new UpdateWrapper<>();
-        targetUpdateWrapper.eq("req_id",vo.getId());
-        targetUpdateWrapper.eq("year",LocalDate.now().getYear());
-        targetService.remove(targetUpdateWrapper);
         targets.forEach(i ->{
+            if(i.getId() == null){
+                i.setCreatedDate(LocalDateTime.now());
+            }
             i.setYear(LocalDate.now().getYear());
-            i.setCreatedDate(LocalDateTime.now());
             i.setUpdateDate(LocalDateTime.now());
-            targetService.save(i);
         });
+        targetService.saveOrUpdateBatch(targets);
         vo.setUpdateDate(LocalDateTime.now());
         UpdateWrapper<GradRequirement> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",vo.getId());
@@ -119,12 +121,16 @@ public class GradRequirementController extends PageBaseController {
         return update ? ActionResult.ofSuccess() : ActionResult.ofFail(200,"添加失败");
     }
 
-    @RequestMapping("/del")
-    public ActionResult del(@RequestBody IdsVo ids){
-        for (String id : ids.getIds()) {
-            gradRequirementService.removeById(id);
-        }
-        return ActionResult.ofSuccess();
+    @RequestMapping("/deleteList")
+    public ActionResult deleteList(@RequestBody IdsVo ids){
+        boolean b = gradRequirementService.removeByIds(ids.getIds());
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
+    }
+
+    @RequestMapping("/deleteOne")
+    public ActionResult deleteOne(@RequestBody GradRequirement gradRequirement){
+        boolean b = gradRequirementService.removeById(gradRequirement.getId());
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
 
     @RequestMapping("/exportTemplate")

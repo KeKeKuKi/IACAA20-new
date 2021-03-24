@@ -129,7 +129,6 @@ export default {
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }
-    this.handleLogin()
   },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
@@ -158,8 +157,6 @@ export default {
       })
     },
     handleLogin() {
-      this.loginForm.username = 'admin'
-      this.loginForm.password = 'Pfg85191558'
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -167,7 +164,6 @@ export default {
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
-              console.log('here')
               this.$emit('already_login')
             })
             .catch(error => {

@@ -24,7 +24,7 @@ public class User{
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id",type = IdType.AUTO)
-    private long id;
+    private Long id;
 
     @TableField("name")
     private String name;

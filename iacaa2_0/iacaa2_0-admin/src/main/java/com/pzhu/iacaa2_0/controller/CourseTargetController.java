@@ -4,6 +4,7 @@ package com.pzhu.iacaa2_0.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.CourseTarget;
+import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.entityVo.CourseTargetVo;
 import com.pzhu.iacaa2_0.service.ICourseTargetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +78,11 @@ public class CourseTargetController {
         }
         boolean b = courseTargetService.saveOrUpdateBatch(courseTargets);
         return b ? ActionResult.ofSuccess() : ActionResult.ofFail(200,"后台异常，更新失败");
+    }
+
+    @RequestMapping("/deleteOne")
+    public ActionResult deleteOne(@RequestBody CourseTargetVo courseTargetVo){
+        boolean b = courseTargetService.removeById(courseTargetVo.getId());
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
 }

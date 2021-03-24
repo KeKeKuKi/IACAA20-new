@@ -7,6 +7,10 @@ logging:
      name: "system.log"
 
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 159.75.109.113:8848
   mvc:
     throw-exception-if-no-handler-found: true
 #  resources:
@@ -20,6 +24,8 @@ spring:
     include: jdbc
   aop:
     proxy-target-class: true
+  application:
+    name: Iacaa20Server
 # pagehelper
 pagehelper:
   helperDialect: mysql
@@ -60,5 +66,11 @@ mybatis-plus:
 #    jdbc-type-for-null: 'null'
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     database-id: mysql
+com:
+  gapache:
+    security:
+      register-remote: true
+      update-resources: true
+      client-id: Iacaa20Server
 
 

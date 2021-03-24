@@ -23,7 +23,7 @@ public class SysConfig {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id",type = IdType.AUTO)
-    private long id;
+    private Long id;
 
     /**
      * 配置名

@@ -48,7 +48,7 @@ export const constantRoutes = [
         path: 'GradRequirementEdit',
         component: () => import('@/views/gradRequirement/GradRequirementEdit'),
         name: 'GradRequirementEdit',
-        meta: { title: '毕业要求', icon: 'chart', affix: true }
+        meta: { title: '毕业要求', icon: 'education', affix: true }
       }
     ]
   },
@@ -82,6 +82,46 @@ export const constantRoutes = [
         component: () => import('@/views/course/CheckLinks'),
         name: 'CheckLinks',
         meta: { title: '考核环节', icon: 'chart', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/Score',
+    component: Layout,
+    redirect: '/Score',
+    meta: { title: '成绩管理', icon: 'chart', affix: true },
+    children: [
+      {
+        path: 'CheckLinkScore',
+        component: () => import('@/views/score/CheckLinkScore'),
+        name: 'CheckLinkScore',
+        meta: { title: '添加成绩', icon: 'chart', affix: true }
+      },
+      {
+        path: 'SerchScore',
+        component: () => import('@/views/score/SerchScore'),
+        name: 'SerchScore',
+        meta: { title: '查看成绩', icon: 'chart', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/User',
+    component: Layout,
+    redirect: '/User',
+    meta: { title: '用户权限', icon: 'chart', affix: true },
+    children: [
+      {
+        path: 'User',
+        component: () => import('@/views/user/index'),
+        name: 'User',
+        meta: { title: '用户管理', icon: 'chart', affix: true }
+      },
+      {
+        path: 'Role',
+        component: () => import('@/views/user/Role'),
+        name: 'Role',
+        meta: { title: '角色管理', icon: 'chart', affix: true }
       }
     ]
   }

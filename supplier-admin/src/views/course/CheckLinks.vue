@@ -73,17 +73,38 @@
           <el-form-item label="考核环节：" prop="pass">
             <el-button type="primary" round style="" @click="handleAddCheckLink">添加</el-button>
             <br>
+            <el-table
+              ref="multipleTable"
+              style="width: 100%"
+              height="50"
+              tooltip-effect="dark">
+            <el-table-column
+              prop=""
+              label="考核环节"
+              width="250">
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="环节总分"
+              width="90">
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="权重系数">
+            </el-table-column>
+          </el-table>
             <!--eslint-disable-next-line-->
             <span v-for="(item,index) in ckeckLinkEditForm.checkLinks" type="text" autocomplete="off">
-              <el-select v-model="item.name" placeholder="标题" clearable filterable style="width: 60%;margin-top: 10px">
+              <el-select v-model="item.name" placeholder="标题" clearable filterable style="width: 50%;margin-top: 10px">
                 <el-option label="期末考试" value="期末考试" />
                 <el-option label="期中考试" value="期中考试" />
                 <el-option label="日常作业" value="日常作业" />
                 <el-option label="课堂表现" value="课堂表现" />
                 <el-option label="日常考勤" value="日常考勤" />
               </el-select>
+              <el-input v-model="item.targetScore"  label="目标分数" style="width: 10%;margin-top: 10px" />
               <el-input-number v-model="item.mix" :min="0.1" :max="1" step="0.1" label="权重系数" style="width: 30%;margin-top: 10px" />
-              <el-button type="danger" icon="el-icon-delete" circle @click="deleteDiscribe(index)" />
+              <el-button type="danger" icon="el-icon-delete" circle @click="deleteDiscribe(index)" style="margin-left: 10px"/>
             </span>
           </el-form-item>
         </el-form>
@@ -188,7 +209,7 @@ export default {
       this.ckeckLinkEditForm.checkLinks.splice(index,1)
     },
     handleAddCheckLink(){
-      this.ckeckLinkEditForm.checkLinks.push({name:'',mix: '',taskId: this.ckeckLinkEditForm.courseTask.id})
+      this.ckeckLinkEditForm.checkLinks.push({name:'',mix: '',targetScore: '',taskId: this.ckeckLinkEditForm.courseTask.id})
     },
     submitCheckLinksForm(){
       this.loading = true

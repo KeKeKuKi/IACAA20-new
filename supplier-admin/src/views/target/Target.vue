@@ -218,13 +218,28 @@ export default {
       this.targetEditForm.courseTargets.push({ course: { id: '' }, target: { id: this.targetEditForm.id }, mix: '' })
     },
     deleteDiscribe(index) {
+      let id = this.targetEditForm.courseTargets[index].id
+      if(id){
+        requestByClient(supplierConsumer, 'POST', 'courseTarget/deleteOne', {
+          id: id
+        }, res => {
+          if (res.data.succ) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+          } else {
+            this.$message.warning(res.data.msg)
+          }
+          this.loading = false
+        })
+      }
       this.targetEditForm.courseTargets.splice(index, 1)
     },
     submitTargetEditForm() {
       this.loading = true
       requestByClient(supplierConsumer, 'POST', 'courseTarget/saveOrUpdate', this.targetEditForm.courseTargets, res => {
         if (res.data.succ) {
-          this.getReqList()
           this.dialogVisible = false
           this.$message({
             message: '修改成功',

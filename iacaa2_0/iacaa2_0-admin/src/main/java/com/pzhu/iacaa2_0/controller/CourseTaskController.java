@@ -68,9 +68,9 @@ public class CourseTaskController {
             }else {
                 courseTask.setCreatedDate(LocalDateTime.now());
             }
-            courseTask.setCourseId((int)i.getCourse().getId());
+            courseTask.setCourseId(i.getCourse().getId().intValue());
             courseTask.setMix(i.getMix());
-            courseTask.setTargetId((int)i.getTarget().getId());
+            courseTask.setTargetId(i.getTarget().getId().intValue());
             courseTask.setDescribes(i.getDescribes());
             courseTask.setYear(LocalDateTime.now().getYear());
             tasks.add(courseTask);

@@ -27,7 +27,7 @@ public class ShiroCofig {
          *   perms:该资源必须得到资源权限可以访问
          *   role：该资源必须得到角色权限可以访问
          */
-        Map<String,String> filterMap = new LinkedHashMap<>();
+        Map<String,String> filterMap = new LinkedHashMap<String,String>();
 //        filterMap.put("/**","jwt");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);

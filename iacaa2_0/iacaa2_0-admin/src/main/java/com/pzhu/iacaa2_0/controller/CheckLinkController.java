@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -54,6 +55,10 @@ public class CheckLinkController {
         AtomicReference<Float> mixAll = new AtomicReference<>(0F);
         checkLinks.forEach(i -> {
             mixAll.set((float)(mixAll.get() + i.getMix()));
+            if(i.getId() == null){
+                i.setCreatedDate(LocalDateTime.now());
+            }
+            i.setUpdateDate(LocalDateTime.now());
         });
 
         if(mixAll.get() < 0.01f || mixAll.get() > 1.01f){

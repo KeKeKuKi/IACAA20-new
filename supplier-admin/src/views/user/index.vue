@@ -1,100 +1,110 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
-      <el-button v-waves class="filter-item" style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        查询
-      </el-button>
-      <el-button v-waves class="filter-item" style="margin-left: 20px;" type="primary" @click="handleAdd">
-        新增
-      </el-button>
-    </div>
-
+  <div>
+    <el-form>
+      <span style="float: right;margin: 20px">
+          <el-button type="warning" @click="addUser">添加用户</el-button>
+          <el-button type="danger" >删除</el-button>
+      </span>
+    </el-form>
     <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-      @sort-change="sortChange"
+      ref="multipleTable"
+      :data="tableData"
+      style="width: 98%; margin: 30px"
+      height="750"
+      tooltip-effect="dark"
+      @selection-change="handleSelectionChange"
     >
-      <el-table-column label="ID" align="center" width="50">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="账号" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="角色" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.role === 0 ? '普通用户' : '管理员' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="操作" width="200">
-        <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
-        </template>
+      <el-table-column
+        type="selection"
+        width="55"
+      />
+      <el-table-column
+        type="index"
+        width="50"
+      />
+      <el-table-column
+        prop="id"
+        label="ID"
+        width="80"
+      />
+      <el-table-column
+        prop="username"
+        label="用户名"
+        width="200"
+      />
+      <el-table-column
+        prop="createBy"
+        label="创建者"
+        width="200"
+      />
+      <el-table-column
+        prop="createTime"
+        label="创建时间"
+        width="200"
+      />
+      <el-table-column
+        prop="lastModifiedBy"
+        label="最终修改者"
+        width="200"
+      />
+      <el-table-column
+        prop="lastModifiedTime"
+        label="修改时间"
+        width="200"
+      />
+      <el-table-column label="操作">
+          <el-button type="primary" icon="el-icon-edit" circle />
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.number"
-      @pagination="getList"
-    />
+    <el-dialog
+      title="添加用户"
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      width="30%"
+      center
+    >
+      <div>
+        <el-form ref="ruleForm" :model="userAddForm" status-icon class="demo-ruleForm">
+          <el-form-item label="用户名" prop="name">
+            <el-input v-model="userAddForm.username" type="text" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="密码" prop="pass">
+            <el-input v-model="userAddForm.password" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="确认密码" prop="pass">
+            <el-input v-model="userAddForm.password2" type="password" autocomplete="off" />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible1 = false">取 消</el-button>
+        <el-button type="primary" @click="submituserAddForm()">确 定</el-button>
+      </div>
+    </el-dialog>
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType === 'edit' ? '编辑' : '新增'">
-      <el-form :model="data" label-width="80px" label-position="left">
-        <el-form-item label="账号">
-          <el-input v-model="data.username" placeholder="请输入账号" />
-        </el-form-item>
-        <el-form-item v-if="dialogType !== 'edit'" label="密码">
-          <el-input v-model="data.password" type="password" placeholder="请输入密码" />
-        </el-form-item>
-        <el-form-item label="角色">
-          <el-select
-            v-model="data.role"
-            filterable
-            allow-create
-            default-first-option
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in tags"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="data.role === 0" label="权限">
-          <el-select
-            v-model="data.permission"
-            filterable
-            allow-create
-            default-first-option
-            multiple
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in groups"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div style="text-align:right;">
-        <el-button type="danger" @click="dialogVisible=false">取消</el-button>
-        <el-button type="primary" @click="submitMethod">提交</el-button>
+    <el-dialog
+      title="编辑用户"
+      :visible.sync="dialogVisible2"
+      :close-on-click-modal="false"
+      width="30%"
+      center
+    >
+      <div>
+        <el-form ref="ruleForm" :model="userEditForm" status-icon class="demo-ruleForm">
+          <el-form-item label="用户名" prop="name">
+            <el-input v-model="userEditForm.username" type="text" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="角色" prop="name">
+            <el-select v-model="userEditForm.roleId" placeholder="选择角色" clearable filterable style="width: 60%;margin-top: 10px">
+              <el-option v-for="(item1,index1) in roles" :key="index1" :label="item1.name" :value="item1.id" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible1 = false">取 消</el-button>
+        <el-button type="primary" @click="">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -102,9 +112,8 @@
 
 <script>
 import waves from '../../directive/waves'
-import Pagination from '../../components/Pagination'
-import { Xxl, requestByClient } from '../../utils/HttpUtils'
-
+// import Pagination from '../../components/Pagination'
+import { UserServer, AuthServer, requestByClient } from '@/utils/HttpUtils'
 const defaultData = {
   id: null,
   username: '',
@@ -115,7 +124,7 @@ const defaultData = {
 
 export default {
   name: 'User',
-  components: { Pagination },
+  // components: { Pagination },
   directives: { waves },
   filters: {},
   data() {
@@ -135,48 +144,104 @@ export default {
       data: Object.assign({}, defaultData),
       tableKey: 0,
       list: null,
-      total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
-        number: 20,
-        sort: 'time',
+        number: 100,
+        sort: 'username',
         asc: true,
         customParams: {
           role: -1
         }
       },
       dialogType: 'new',
-      dialogVisible: false
+      dialogVisible: false,
+      dialogVisible2: false,
+      tableData: [],
+      pageSize: 20,
+      total: 0,
+      currentPage: 1,
+      userAddForm: {
+        username: '',
+        password: '',
+        password2: ''
+      },
+      userEditForm: {
+        username: '',
+        userId: '',
+        roleId: ''
+      },
+      roles: []
     }
   },
   computed: {},
-  created() {
-    requestByClient(Xxl, 'get', '/joblog/filterJobGroupByRole', null, resp => {
-      const respJson = resp.data
-      const { code, data } = respJson
-      if (code === 0 && data) {
-        const groups = []
-        data.forEach(item => {
-          groups.push({
-            value: item.id + '',
-            label: item.appName
-          })
-        })
-        this.groups = groups
-      }
-    })
+  mounted() {
     this.getList()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      requestByClient(Xxl, 'post', '/user/page', this.listQuery, resp => {
+    submituserAddForm(){
+      if(this.userAddForm.password.length < 6){
+        this.$message({
+          message: '密码长度最少6位数',
+          type: 'error'
+        })
+        return false
+      }
+
+      if(this.userAddForm.password !== this.userAddForm.password2){
+        this.$message({
+          message: '两次密码不一致',
+          type: 'error'
+        })
+        return false
+      }
+
+      requestByClient(UserServer, 'post', '/api/user', {
+        username: this.userAddForm.username,
+        password: this.userAddForm.password,
+        client: 'Iacaa20Server'
+      }, resp => {
         const respJson = resp.data
         const { code } = respJson
         if (code === 0) {
-          this.list = respJson.data.items
+          this.$message({
+            message: '添加成功',
+            type: 'success'
+          })
+          this.userAddForm.password = ''
+          this.userAddForm.username = ''
+          this.userAddForm.password2 = ''
+          this.dialogVisible = false
+          this.getList()
+        }
+        this.listLoading = false
+      })
+    },
+    addUser(){
+      this.dialogVisible = true
+    },
+    getList() {
+      this.listLoading = true
+      requestByClient(UserServer, 'post', '/api/user/page', this.listQuery, resp => {
+        const respJson = resp.data
+        const { code } = respJson
+        if (code === 0) {
+          this.tableData = respJson.data.items
           this.total = respJson.data.total
+          // this.pageSize = res.data.data.pageSize
+          // this.currentPage = res.data.data.pageNum
+        }
+        this.listLoading = false
+      })
+
+      requestByClient(AuthServer, 'post', '/api/role/page', this.listQuery, resp => {
+        const respJson = resp.data
+        const { code } = respJson
+        if (code === 0) {
+          this.roles = respJson.data.items
+          this.total = respJson.data.total
+          // this.pageSize = res.data.data.pageSize
+          // this.currentPage = res.data.data.pageNum
         }
         this.listLoading = false
       })
@@ -219,9 +284,10 @@ export default {
       this.addShow()
     },
     editShow(username) {
-      requestByClient(Xxl, 'get', '/user/findByUsername/' + username, null, resp => {
+      requestByClient(UserServer, 'get', '/api/user/findByUsername/' + username, null, resp => {
         const respJson = resp.data
         const { code, data } = respJson
+
         if (code === 0) {
           this.data.id = data.id
           this.data.username = data.username
@@ -244,7 +310,7 @@ export default {
         type: 'warning'
       })
         .then(async() => {
-          requestByClient(Xxl, 'post', '/user/newRemove/' + row.id, null, resp => {
+          requestByClient(UserServer, 'post', '/user/newRemove/' + row.id, null, resp => {
             const respJson = resp.data
             const { code, error } = respJson
             if (code === 0) {
@@ -266,7 +332,8 @@ export default {
           })
         })
         .catch(err => {
-          console.error(err)
+          // eslint-disable-next-line no-console
+          console.log(err)
         })
     },
     handleClose(tag) {
@@ -281,9 +348,8 @@ export default {
         url = '/user/newAdd'
       }
       this.dialogVisible = false
-      console.log(this.data.permission)
       this.data.permission = this.data.permission.join(',')
-      requestByClient(Xxl, 'post', url, this.data, resp => {
+      requestByClient(UserServer, 'post', url, this.data, resp => {
         const respJson = resp.data
         const { code, error } = respJson
         if (code === 0) {

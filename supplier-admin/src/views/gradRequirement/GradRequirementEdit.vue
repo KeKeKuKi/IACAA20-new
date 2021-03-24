@@ -21,9 +21,9 @@
         <el-form-item>
           <el-button type="success" @click="exportTemplate">下载导入模板</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="success" @click="">导入年度配置</el-button>
-        </el-form-item>
+<!--        <el-form-item>-->
+<!--          <el-button type="success" @click="">导入年度配置</el-button>-->
+<!--        </el-form-item>-->
         <el-form-item>
           <el-button type="warning" @click="handleAddForm()">新增</el-button>
         </el-form-item>
@@ -32,7 +32,6 @@
         </el-form-item>
       </span>
     </el-form>
-    <el-divider />
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -98,7 +97,7 @@
           <el-form-item label="指标点：" prop="pass">
             <el-button type="primary" round style="" @click="handleAddTarget">添加</el-button>
             <br>
-            <span v-for="(item,index) in editForm.targets" type="text" autocomplete="off">
+            <span :key="index" v-for="(item,index) in editForm.targets" type="text" autocomplete="off">
               <el-input v-model="item.discribe" type="text" autocomplete="off" style="width: 91%;margin-top: 10px" />
               <el-button type="danger" icon="el-icon-delete" circle @click="deleteDiscribe(index)" />
             </span>
@@ -184,7 +183,6 @@ export default {
       this.ids = result
     },
     onSubmit() {
-      console.log('submit!')
     },
     getList() {
       this.loading = true
@@ -212,7 +210,7 @@ export default {
       this.currentPage = val
       this.getList()
     },
-    handleClose(done) {
+    handleClose() {
     },
     submitEditForm() {
       this.dialogVisible = false
@@ -280,6 +278,19 @@ export default {
       this.editForm.targets.push({ discribe: '', reqId: this.editForm.id })
     },
     deleteDiscribe(index) {
+      let target = this.editForm.targets[index]
+
+      if(target.id){
+        let id = target.id
+        requestByClient(supplierConsumer, 'POST','target/deleteOne', {id: id},res => {
+          if (res.data.succ) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+          }
+        })
+      }
       this.editForm.targets.splice(index, 1)
     },
     exportTemplate() {
@@ -291,8 +302,6 @@ export default {
         })
         const objectUrl = URL.createObjectURL(blob)
         const a = document.createElement('a')
-        const contentDisposition = res.headers['content-disposition']
-        console.log(contentDisposition)
         a.href = objectUrl
         a.download = new Date().getFullYear() + '年度毕业要求导入模板'
         // a.click();

@@ -99,4 +99,10 @@ public class TargetController {
         }
         return ActionResult.ofSuccess();
     }
+
+    @RequestMapping("/deleteOne")
+    public ActionResult deleteOne(@RequestBody Target target){
+        boolean b = targetService.removeById(target.getId());
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
+    }
 }

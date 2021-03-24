@@ -1,6 +1,6 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
-import { supplierConsumer, requestByClient } from '@/utils/HttpUtils'
+import { authCenterServer, requestByClient } from '@/utils/HttpUtils'
 
 const state = {
   token: getToken(),
@@ -45,7 +45,7 @@ export const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      requestByClient(supplierConsumer, 'post', '/newLogin', { username: username, password: password }, resp => {
+      requestByClient(authCenterServer, 'post', '/auth/login', { username: username, password: password }, resp => {
         const respJson = resp.data
         const { code, data } = respJson
         if (code === 0) {
