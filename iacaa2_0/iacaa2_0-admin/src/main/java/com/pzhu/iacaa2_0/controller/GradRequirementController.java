@@ -65,7 +65,7 @@ public class GradRequirementController extends PageBaseController {
     ITargetService targetService;
 
     @RequestMapping("/list")
-    @AuthResource(scope = "list", name = "GradRequirement列表")
+    @AuthResource(scope = "list", name = "毕业要求列表")
     public ActionResult list(@RequestBody GradRequirementVo vo){
         QueryWrapper<GradRequirement> wrapper = new QueryWrapper<>();
         if(!StringUtils.isEmpty(vo.getWord())){
@@ -84,6 +84,7 @@ public class GradRequirementController extends PageBaseController {
 
 
     @RequestMapping("/voList")
+    @AuthResource(scope = "voList", name = "毕业要求Vo列表")
     public ActionResult voList(@RequestBody GradRequirementVo vo){
         PageHelper.startPage(vo.getPageNum(),vo.getPageSize());
         List<GradRequirementVo> list = gradRequirementService.voList(vo);
@@ -93,6 +94,7 @@ public class GradRequirementController extends PageBaseController {
 
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/update")
+    @AuthResource(scope = "update", name = "更新毕业要求")
     public ActionResult update(@RequestBody GradRequirementVo vo){
         List<Target> targets = vo.getTargets();
         targets.forEach(i ->{
@@ -111,6 +113,7 @@ public class GradRequirementController extends PageBaseController {
     }
 
     @RequestMapping("/save")
+    @AuthResource(scope = "save", name = "保存毕业要求")
     public ActionResult save(@RequestBody GradRequirement gradRequirement){
         if(gradRequirement.getYear() == null){
             gradRequirement.setYear(LocalDate.now().getYear());
@@ -122,18 +125,21 @@ public class GradRequirementController extends PageBaseController {
     }
 
     @RequestMapping("/deleteList")
+    @AuthResource(scope = "deleteList", name = "删除毕业要求列表")
     public ActionResult deleteList(@RequestBody IdsVo ids){
         boolean b = gradRequirementService.removeByIds(ids.getIds());
         return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
 
     @RequestMapping("/deleteOne")
+    @AuthResource(scope = "deleteOne", name = "删除单个毕业要求")
     public ActionResult deleteOne(@RequestBody GradRequirement gradRequirement){
         boolean b = gradRequirementService.removeById(gradRequirement.getId());
         return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
 
     @RequestMapping("/exportTemplate")
+    @AuthResource(scope = "exportTemplate", name = "导出模板")
     public void exportTemplate(HttpServletResponse response, HttpServletRequest request) throws IOException {
         File file = new File("D:/doc/"+"import"+".xlsx");
         if(!file.exists()){

@@ -61,7 +61,7 @@ export const constantRoutes = [
         path: 'Target',
         component: () => import('@/views/target/Target'),
         name: 'Target',
-        meta: { title: '指标点', icon: 'chart', affix: true }
+        meta: { title: '指标点', icon: 'star', affix: true }
       }
     ]
   },
@@ -69,19 +69,19 @@ export const constantRoutes = [
     path: '/Course',
     component: Layout,
     redirect: '/Course',
-    meta: { title: '课程编辑', icon: 'chart', affix: true },
+    meta: { title: '课程编辑', icon: 'edit', affix: true },
     children: [
       {
         path: 'Course',
         component: () => import('@/views/course/Course'),
         name: 'Course',
-        meta: { title: '课程目标', icon: 'chart', affix: true }
+        meta: { title: '课程目标', icon: 'edit', affix: true }
       },
       {
         path: 'CheckLinks',
         component: () => import('@/views/course/CheckLinks'),
         name: 'CheckLinks',
-        meta: { title: '考核环节', icon: 'chart', affix: true }
+        meta: { title: '考核环节', icon: 'edit', affix: true }
       }
     ]
   },
@@ -89,19 +89,19 @@ export const constantRoutes = [
     path: '/Score',
     component: Layout,
     redirect: '/Score',
-    meta: { title: '成绩管理', icon: 'chart', affix: true },
+    meta: { title: '成绩管理', icon: 'list', affix: true },
     children: [
       {
         path: 'CheckLinkScore',
         component: () => import('@/views/score/CheckLinkScore'),
         name: 'CheckLinkScore',
-        meta: { title: '添加成绩', icon: 'chart', affix: true }
+        meta: { title: '添加成绩', icon: 'list', affix: true }
       },
       {
         path: 'SerchScore',
         component: () => import('@/views/score/SerchScore'),
         name: 'SerchScore',
-        meta: { title: '查看成绩', icon: 'chart', affix: true }
+        meta: { title: '查看成绩', icon: 'list', affix: true }
       }
     ]
   },
@@ -109,19 +109,19 @@ export const constantRoutes = [
     path: '/User',
     component: Layout,
     redirect: '/User',
-    meta: { title: '用户权限', icon: 'chart', affix: true },
+    meta: { title: '用户权限', icon: 'peoples', affix: true },
     children: [
       {
         path: 'User',
         component: () => import('@/views/user/index'),
         name: 'User',
-        meta: { title: '用户管理', icon: 'chart', affix: true }
+        meta: { title: '用户管理', icon: 'peoples', affix: true }
       },
       {
         path: 'Role',
         component: () => import('@/views/user/Role'),
         name: 'Role',
-        meta: { title: '角色管理', icon: 'chart', affix: true }
+        meta: { title: '角色管理', icon: 'peoples', affix: true }
       }
     ]
   }

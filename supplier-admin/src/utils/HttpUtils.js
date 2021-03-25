@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
+import ElementUI from "element-ui";
+
 
 export const supplierConsumer = axios.create({
   baseURL: 'http://localhost:19999/Iacaa20Server',

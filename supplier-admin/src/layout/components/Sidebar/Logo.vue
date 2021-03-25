@@ -24,8 +24,8 @@ export default {
   },
   data() {
     return {
-      title: '商品大数据平台',
-      logo: 'https://www.51ishare.com/img/logo.svg'
+      title: 'IACAA2.0',
+      logo: 'https://www.logosc.cn/img/logo-icons/logosc.svg'
     }
   }
 }

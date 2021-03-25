@@ -11,6 +11,7 @@ spring:
     nacos:
       discovery:
         server-addr: 159.75.109.113:8848
+        group: IACAA
   mvc:
     throw-exception-if-no-handler-found: true
 #  resources:

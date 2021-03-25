@@ -12,7 +12,6 @@
       style="width: 98%; margin: 30px"
       height="750"
       tooltip-effect="dark"
-      @selection-change="handleSelectionChange"
     >
       <el-table-column
         type="selection"
@@ -53,7 +52,9 @@
         width="200"
       />
       <el-table-column label="操作">
-          <el-button type="primary" icon="el-icon-edit" circle />
+        <template slot-scope="scope">
+          <el-button type="primary" @click="editUser(scope.row)" >编辑角色</el-button>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -78,7 +79,7 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible1 = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submituserAddForm()">确 定</el-button>
       </div>
     </el-dialog>
@@ -92,19 +93,19 @@
     >
       <div>
         <el-form ref="ruleForm" :model="userEditForm" status-icon class="demo-ruleForm">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="userEditForm.username" type="text" autocomplete="off" />
+          <el-form-item label="用户名" prop="name" >
+            <el-input v-model="userEditForm.username" type="text" autocomplete="off" disabled style="width: 80%"/>
           </el-form-item>
-          <el-form-item label="角色" prop="name">
-            <el-select v-model="userEditForm.roleId" placeholder="选择角色" clearable filterable style="width: 60%;margin-top: 10px">
-              <el-option v-for="(item1,index1) in roles" :key="index1" :label="item1.name" :value="item1.id" />
+          <el-form-item label="角 色" prop="name">
+            <el-select v-model="userEditForm.roleId" placeholder="选择角色" clearable filterable style="width: 82%">
+              <el-option v-for="(item1,index1) in roles" :key="index1" :label="item1.description" :value="item1.id" />
             </el-select>
           </el-form-item>
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible1 = false">取 消</el-button>
-        <el-button type="primary" @click="">确 定</el-button>
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="submitUserEdit">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -179,6 +180,38 @@ export default {
     this.getList()
   },
   methods: {
+    submitUserEdit(){
+      requestByClient(AuthServer, 'post', '/api/user/setUserRole', this.userEditForm, resp => {
+        const respJson = resp.data
+        const { code } = respJson
+        if (code === 0) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        }
+        this.dialogVisible2 = false
+      })
+    },
+    editUser(row){
+      this.userEditForm.username = row.username
+      this.userEditForm.userId = row.id
+      this.userEditForm.roleId = row.roleId
+      requestByClient(AuthServer, 'post', '/api/role/list', {
+
+      }, resp => {
+        console.log(resp)
+        const respJson = resp.data
+        const { code } = respJson
+        console.log(respJson)
+        if (code === 0) {
+          this.roles = respJson.data
+
+        }
+        this.listLoading = false
+      })
+      this.dialogVisible2 = true
+    },
     submituserAddForm(){
       if(this.userAddForm.password.length < 6){
         this.$message({
@@ -196,7 +229,7 @@ export default {
         return false
       }
 
-      requestByClient(UserServer, 'post', '/api/user', {
+      requestByClient(AuthServer, 'post', '/api/user', {
         username: this.userAddForm.username,
         password: this.userAddForm.password,
         client: 'Iacaa20Server'
@@ -227,18 +260,6 @@ export default {
         const { code } = respJson
         if (code === 0) {
           this.tableData = respJson.data.items
-          this.total = respJson.data.total
-          // this.pageSize = res.data.data.pageSize
-          // this.currentPage = res.data.data.pageNum
-        }
-        this.listLoading = false
-      })
-
-      requestByClient(AuthServer, 'post', '/api/role/page', this.listQuery, resp => {
-        const respJson = resp.data
-        const { code } = respJson
-        if (code === 0) {
-          this.roles = respJson.data.items
           this.total = respJson.data.total
           // this.pageSize = res.data.data.pageSize
           // this.currentPage = res.data.data.pageNum

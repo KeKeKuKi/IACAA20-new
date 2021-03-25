@@ -54,6 +54,4 @@ public class CheckLink extends BaseEntity {
     @TableField("mix")
     private Double mix;
 
-
-
 }
